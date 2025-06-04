@@ -1,4 +1,7 @@
 {
     "languange": "Languange",
-    "login": "Login" 
+    "login": "Login", 
+    "warning": "Warning",
+    "tryAgain": "Try again",
+    "connectionError": "No internet connection"
 }

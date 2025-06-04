@@ -1,4 +1,7 @@
 {
     "languange": "bahasa",
-    "login": "Masuk"  
+    "login": "Masuk",
+    "warning": "Peringatan",
+    "tryAgain": "Coba lagi",
+    "connectionError": "Tidak ada koneksi internet"  
 }

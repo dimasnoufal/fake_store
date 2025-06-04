@@ -13,11 +13,31 @@ class AppColor {
   static const kErrorColor = Color(0xFFF44336);
   static const kWarningColor = Color(0xFFFF9800);
 
+  // Text styles
+  static TextStyle blackTextStyle = TextStyle(
+    fontFamily: 'EncodeSans',
+    color: kDarkColor,
+  );
+
+  static TextStyle whiteTextStyle = TextStyle(
+    fontFamily: 'EncodeSans',
+    color: kLightColor,
+  );
+
+  static TextStyle darkGreyTextStyle = TextStyle(
+    fontFamily: 'EncodeSans',
+    color: kSecondaryColor,
+  );
+
+  static TextStyle lightGreyTextStyle = TextStyle(
+    fontFamily: 'EncodeSans',
+    color: kTertiaryColor,
+  );
+
   // Theme colors
   static ThemeData mainScheme = ThemeData(
     fontFamily: 'EncodeSans',
-    scaffoldBackgroundColor: AppColor.kLightColor, // pakai kLightColor (F2F2F2)
-
+    scaffoldBackgroundColor: AppColor.kLightColor,
     colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: AppColor.kPrimaryColor,
@@ -29,7 +49,6 @@ class AppColor {
       surface: Colors.white,
       onSurface: Colors.black,
     ),
-
     appBarTheme: AppBarTheme(
       backgroundColor: AppColor.kPrimaryColor,
       elevation: 0,
@@ -37,16 +56,13 @@ class AppColor {
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       iconTheme: IconThemeData(color: Colors.white),
     ),
-
     dialogTheme: const DialogTheme(
       surfaceTintColor: Colors.transparent,
     ),
-
     datePickerTheme: const DatePickerThemeData(
       rangePickerSurfaceTintColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
     ),
-
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColor.kPrimaryColor,
