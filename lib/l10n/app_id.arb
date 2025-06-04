@@ -3,5 +3,12 @@
     "login": "Masuk",
     "warning": "Peringatan",
     "tryAgain": "Coba lagi",
-    "connectionError": "Tidak ada koneksi internet"  
+    "connectionError": "Tidak ada koneksi internet",
+    "tittleOnboarding1": "Jelajahi semua kategori",
+    "subTittleOnboarding1": "Jelajahi berbagai kategori produk dengan mudah dan temukan semua yang kamu butuhkan di satu tempat.",
+    "tittleOnboarding2": "Diskon & Penawaran Menarik",
+    "subTittleOnboarding2": "Nikmati diskon menarik dan penawaran spesial untuk produk favoritmu.",
+    "tittleOnboarding3": "Pengiriman dalam 30 Menit",
+    "subTittleOnboarding3": "Rasakan layanan pengiriman cepat dan terpercaya langsung ke depan pintu rumahmu dalam waktu 30 menit."
+
 }
