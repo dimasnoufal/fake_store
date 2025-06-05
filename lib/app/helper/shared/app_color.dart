@@ -9,8 +9,8 @@ class AppColor {
   static const kDarkColor = Color(0xFF121111);
 
   // Accent colors
-  static const kSuccessColor = Color(0xFF4CAF50);
-  static const kErrorColor = Color(0xFFF44336);
+  static const kSuccessColor = Color(0xFF21BF73);
+  static const kErrorColor = Color(0xFFF7323F);
   static const kWarningColor = Color(0xFFFF9800);
 
   // Text styles
