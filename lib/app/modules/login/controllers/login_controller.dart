@@ -1,5 +1,9 @@
+import 'package:fake_store/app/helper/shared/logger.dart';
+import 'package:fake_store/app/helper/widgets/dialogs.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginController extends GetxController {
   // Initializing variables
@@ -7,15 +11,18 @@ class LoginController extends GetxController {
   String? password;
   RxBool remember = false.obs;
   RxBool isHiding = true.obs;
+  final strings = AppLocalizations.of(Get.context!);
 
   // Initializing method
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  late final Rx<SharedPreferences?> prefs;
 
   @override
   void onInit() {
     super.onInit();
+    _initPrefs();
   }
 
   @override
@@ -28,5 +35,31 @@ class LoginController extends GetxController {
     super.onClose();
     emailController.dispose();
     passwordController.dispose();
+  }
+
+  Future<void> _initPrefs() async {
+    prefs = Rx<SharedPreferences?>(await SharedPreferences.getInstance());
+    prefs.value?.setInt('conditionStatePage', 1);
+    Logger.printInfo('${prefs.value?.getInt('conditionStatePage')}');
+  }
+
+  bool validateAndSave(BuildContext context) {
+    final form = formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    Dialogs.errorDialog(
+      context: context,
+      function: () {},
+      message: strings!.messageFormLoginError,
+    );
+    return false;
+  }
+
+  void printEmailAndPassword() {
+    email = emailController.text;
+    password = passwordController.text;
+    Logger.printInfo('Email: $email, Password: $password');
   }
 }

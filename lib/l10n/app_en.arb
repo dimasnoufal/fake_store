@@ -10,5 +10,15 @@
     "subTittleOnboarding2": "Get ready to enjoy amazing discounts and offers on your favorite products.",
     "tittleOnboarding3": "Delivery in 30 Min",
     "subTittleOnboarding3": "Experience fast and reliable delivery right to your doorstep in just 30 minutes.",
-    "close": "Close"
+    "close": "Close",
+    "messageFormLoginError": "Please fix the highlighted errors",
+    "welcomeMessage": "Welcome to Store",
+    "welcomeDescription": "Sign in with your email and password or continue with social media",
+    "enterYour": "Enter your",
+    "cantEmpty": "Cannot be empty",
+    "tooShort": "Is too short",
+    "forgotPassword": "Forgot Password",
+    "login": "Login",
+    "dontAccount": "Don’t have an account?",
+    "register": "Register"
 }

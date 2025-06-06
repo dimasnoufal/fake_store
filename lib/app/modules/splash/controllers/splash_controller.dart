@@ -28,8 +28,8 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    startTime();
     _initPrefs().then((_) {
+      startTime();
       changeLanguage();
     });
   }
@@ -47,21 +47,35 @@ class SplashController extends GetxController {
   Future<void> _initPrefs() async {
     prefs = Rx<SharedPreferences?>(await SharedPreferences.getInstance());
     isEnglish.value = prefs.value?.getBool('isEnglish') ?? false;
-    print('isEnglish: ${isEnglish.value}');
+    Logger.printInfo('isEnglish: ${isEnglish.value}');
   }
 
   Future<void> startTime() async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
 
-    print('connectivityResult: $connectivityResult  ');
+    Logger.printInfo('connectivityResult: $connectivityResult  ');
 
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
       PackageInfo packagePlatform = await PackageInfo.fromPlatform();
       packageInfo.value = packagePlatform;
       await Future.delayed(const Duration(seconds: 2));
-      Get.offAllNamed(Routes.ON_BOARDING);
+      int conditionStatePage = prefs.value?.getInt('conditionStatePage') ?? 0;
+      Logger.printInfo('conditionStatePage: $conditionStatePage');
+      switch (conditionStatePage) {
+        case 0:
+          Get.offAllNamed(Routes.ON_BOARDING);
+          break;
+        case 1:
+          Get.offAllNamed(Routes.LOGIN);
+          break;
+        case 2:
+          Get.offAllNamed(Routes.HOME);
+          break;
+        default:
+          Get.offAllNamed(Routes.ON_BOARDING);
+      }
     } else if (connectivityResult.contains(ConnectivityResult.none)) {
       Dialogs.warningDialog(
         context: Get.context!,

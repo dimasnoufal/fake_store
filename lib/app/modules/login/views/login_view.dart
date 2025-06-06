@@ -1,5 +1,6 @@
 import 'package:fake_store/app/helper/shared/app_color.dart';
-import 'package:fake_store/app/helper/widgets/dialogs.dart';
+import 'package:fake_store/app/helper/widgets/custom_innput_obscure.dart';
+import 'package:fake_store/app/helper/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,7 +32,7 @@ class LoginView extends GetView<LoginController> {
         children: [
           const SizedBox(height: 8),
           Text(
-            'Welcome to Store',
+            controller.strings!.welcomeMessage,
             style: AppColor.darkGreyTextStyle.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -39,7 +40,7 @@ class LoginView extends GetView<LoginController> {
             textAlign: TextAlign.start,
           ),
           Text(
-            'Sign in with your email and password or continue with social media',
+            controller.strings!.welcomeDescription,
             style: AppColor.lightGreyTextStyle.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.normal,
@@ -50,7 +51,7 @@ class LoginView extends GetView<LoginController> {
       );
     }
 
-    Widget buildTextInput() {
+    Widget buildFormLogin() {
       return Column(
         children: [
           const SizedBox(
@@ -60,101 +61,52 @@ class LoginView extends GetView<LoginController> {
             key: controller.formKey,
             child: Column(
               children: [
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (newValue) => controller.email = newValue,
+                CustomInput(
+                  labelText: 'Email',
+                  hintText: '${controller.strings!.enterYour} email',
+                  messageError: 'Email ${controller.strings!.cantEmpty}',
+                  controller: controller.emailController,
+                  onSaved: (value) => controller.email = value,
                   onChanged: (value) {
                     controller.email = value;
                   },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      Dialogs.errorDialog(
-                          context: context,
-                          function: () {},
-                          message: "Email cannot be empty");
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    hintText: "Enter your email",
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    suffixIcon: SizedBox(
-                      width: 10,
-                      height: 10,
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          'assets/icons/mail.svg',
-                          height: 16,
-                          width: 16,
-                          colorFilter: ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                              AppColor.kPrimaryColor,
-                              BlendMode.srcIn,
-                            ),
-                          ).colorFilter,
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 20),
                 Obx(
-                  () => TextFormField(
-                    obscureText: controller.isHiding.value,
-                    onSaved: (newValue) => controller.password = newValue,
+                  () => CustomInnputObscure(
+                    labelText: "Password",
+                    hintText: "${controller.strings!.enterYour} password",
+                    isHiding: controller.isHiding.value,
+                    onToggle: () {
+                      controller.isHiding.value = !controller.isHiding.value;
+                    },
+                    messageError1: "Password ${controller.strings!.cantEmpty}",
+                    messageError2: "Password ${controller.strings!.tooShort}",
+                    controller: controller.passwordController,
+                    onSaved: (value) => controller.password = value,
                     onChanged: (value) {
                       controller.password = value;
                     },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        Dialogs.errorDialog(
-                            context: context,
-                            function: () {},
-                            message: "Password cannot be empty");
-                      } else if (value.length < 8) {
-                        Dialogs.errorDialog(
-                            context: context,
-                            function: () {},
-                            message: "Password is too short");
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      hintText: "Enter your password",
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          controller.isHiding.value =
-                              !controller.isHiding.value;
-                        },
-                        icon: controller.isHiding.value
-                            ? const Icon(Icons.visibility_off)
-                            : const Icon(
-                                Icons.visibility,
-                              ),
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Obx(() => Checkbox(
-                          value: controller.remember.value,
-                          activeColor: AppColor.kPrimaryColor,
-                          onChanged: (value) {
-                            controller.remember.value = value!;
-                          },
-                        )),
+                    Obx(
+                      () => Checkbox(
+                        value: controller.remember.value,
+                        activeColor: AppColor.kPrimaryColor,
+                        onChanged: (value) {
+                          controller.remember.value = value!;
+                        },
+                      ),
+                    ),
                     const Text("Remember me"),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {},
-                      child: const Text(
-                        "Forgot Password",
+                      child: Text(
+                        controller.strings!.forgotPassword,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     )
@@ -164,8 +116,12 @@ class LoginView extends GetView<LoginController> {
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Continue"),
+                    onPressed: () {
+                      if (controller.validateAndSave(context)) {
+                        controller.printEmailAndPassword();
+                      }
+                    },
+                    child: Text(controller.strings!.login),
                   ),
                 ),
               ],
@@ -221,7 +177,7 @@ class LoginView extends GetView<LoginController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Don’t have an account? ",
+            controller.strings!.dontAccount,
             style: AppColor.lightGreyTextStyle.copyWith(
               fontSize: 14,
             ),
@@ -229,7 +185,7 @@ class LoginView extends GetView<LoginController> {
           GestureDetector(
             onTap: () => {},
             child: Text(
-              "Sign Up",
+              controller.strings!.register,
               style: AppColor.blackTextStyle.copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
@@ -250,7 +206,7 @@ class LoginView extends GetView<LoginController> {
             children: [
               buildLogo(),
               buildTitle(),
-              buildTextInput(),
+              buildFormLogin(),
               const SizedBox(height: 24),
               buildOptionalLogin(),
               const SizedBox(height: 24),
