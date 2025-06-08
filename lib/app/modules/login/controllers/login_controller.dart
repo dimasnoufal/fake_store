@@ -1,5 +1,6 @@
 import 'package:fake_store/app/helper/shared/logger.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +61,7 @@ class LoginController extends GetxController {
   void printEmailAndPassword() {
     email = emailController.text;
     password = passwordController.text;
+    Get.toNamed(Routes.HOME);
     Logger.printInfo('Email: $email, Password: $password');
   }
 }

@@ -25,3 +25,53 @@ List<OnboardingModel> items(BuildContext context) {
     )
   ];
 }
+
+const String kTosContent = '''
+Welcome to Store!
+
+1. **Acceptance of Terms**  
+   By accessing or using our application, you agree to be bound by these Terms.
+
+2. **Account Responsibility**  
+   You are responsible for maintaining the confidentiality of your login credentials.
+
+3. **Prohibited Activities**  
+   You may not use the app for any illegal or unauthorized purpose.
+
+4. **Privacy**  
+   We respect your privacy. Please review our Privacy Policy for details.
+
+5. **Changes to Terms**  
+   We may update these Terms at any time. Continued use constitutes acceptance.
+
+If you have questions, contact us at support@example.com.
+''';
+
+const String kPrivacyPolicyContent = '''
+Your privacy matters to us.
+
+1. **Information We Collect**  
+   We collect the personal data you provide (e.g., email, profile details) and anonymous usage statistics to improve our services.
+
+2. **How We Use Information**  
+   • To operate and maintain app functionality  
+   • To personalize content and recommendations  
+   • To communicate updates, offers, or critical notices  
+
+3. **Data Sharing**  
+   We do **not** sell your data. We may share it only with trusted service providers under confidentiality agreements or when required by law.
+
+4. **Security**  
+   We employ industry-standard safeguards to protect your information. However, no method of transmission or storage is 100 % secure.
+
+5. **Your Choices & Rights**  
+   You can review, update, or delete your personal information via account settings at any time. You may also opt out of non-essential communications.
+
+6. **Children’s Privacy**  
+   Our services are not directed to children under 13. We do not knowingly collect data from children. If you become aware of such data, please contact us.
+
+7. **Changes to This Policy**  
+   We may revise this Privacy Policy periodically. Continued use after updates means you accept the revised terms.
+
+If you have questions or concerns, contact us at support@example.com.
+''';

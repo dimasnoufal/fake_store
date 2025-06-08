@@ -35,6 +35,10 @@ class CustomInput extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        hintStyle: AppColor.lightGreyTextStyle.copyWith(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),

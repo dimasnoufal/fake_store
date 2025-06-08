@@ -1,6 +1,7 @@
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/app/helper/widgets/custom_innput_obscure.dart';
 import 'package:fake_store/app/helper/widgets/custom_input.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -183,7 +184,9 @@ class LoginView extends GetView<LoginController> {
             ),
           ),
           GestureDetector(
-            onTap: () => {},
+            onTap: () => {
+              Get.toNamed(Routes.REGISTER),
+            },
             child: Text(
               controller.strings!.register,
               style: AppColor.blackTextStyle.copyWith(

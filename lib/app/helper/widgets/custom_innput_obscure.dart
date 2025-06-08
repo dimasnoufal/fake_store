@@ -12,6 +12,7 @@ class CustomInnputObscure extends StatelessWidget {
   final TextEditingController? controller;
   final FormFieldSetter<String>? onSaved;
   final ValueChanged<String>? onChanged;
+  final FormFieldValidator<String>? extraValidator;
   const CustomInnputObscure({
     super.key,
     required this.labelText,
@@ -24,6 +25,7 @@ class CustomInnputObscure extends StatelessWidget {
     required this.controller,
     required this.onSaved,
     required this.onChanged,
+    this.extraValidator,
   });
 
   @override
@@ -38,11 +40,16 @@ class CustomInnputObscure extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) return messageError1;
         if (value.length < 8) return messageError2;
+        if (extraValidator != null) return extraValidator!(value);
         return null;
       },
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        hintStyle: AppColor.lightGreyTextStyle.copyWith(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
