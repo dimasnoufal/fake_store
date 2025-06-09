@@ -1,7 +1,8 @@
 import 'package:fake_store/app/helper/shared/logger.dart';
 import 'package:fake_store/app/helper/shared/string.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
-import 'package:fake_store/app/routes/app_pages.dart';
+// import 'package:fake_store/app/modules/login/controllers/login_controller.dart';
+// import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,16 +18,18 @@ class RegisterController extends GetxController {
   final strings = AppLocalizations.of(Get.context!);
 
   // Initializing method
-  final formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final TapGestureRecognizer tosRecognizer = TapGestureRecognizer();
   final TapGestureRecognizer privacyRecognizer = TapGestureRecognizer();
+  // final controllerLogin = Get.find<LoginController>();
 
   @override
   void onInit() {
     super.onInit();
+    formKey = GlobalKey<FormState>();
     tosRecognizer.onTap = _showTosDialog;
     privacyRecognizer.onTap = _showPrivacyDialog;
   }
@@ -75,7 +78,10 @@ class RegisterController extends GetxController {
     email = emailController.text;
     password = passwordController.text;
     confirmPassword = confirmPasswordController.text;
-    Get.offAllNamed(Routes.LOGIN);
+    // Get.delete<LoginController>();
+    // Get.offNamed(Routes.LOGIN);
+    // controllerLogin.update();
+    Get.back();
     Logger.printInfo(
         'Email: $email, Password: $password, Confirm Password: $confirmPassword');
   }

@@ -33,7 +33,7 @@ class LoginView extends GetView<LoginController> {
         children: [
           const SizedBox(height: 8),
           Text(
-            controller.strings!.welcomeMessage,
+            controller.strings.welcomeMessage,
             style: AppColor.darkGreyTextStyle.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class LoginView extends GetView<LoginController> {
             textAlign: TextAlign.start,
           ),
           Text(
-            controller.strings!.welcomeDescription,
+            controller.strings.welcomeDescription,
             style: AppColor.lightGreyTextStyle.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.normal,
@@ -64,8 +64,8 @@ class LoginView extends GetView<LoginController> {
               children: [
                 CustomInput(
                   labelText: 'Email',
-                  hintText: '${controller.strings!.enterYour} email',
-                  messageError: 'Email ${controller.strings!.cantEmpty}',
+                  hintText: '${controller.strings.enterYour} email',
+                  messageError: 'Email ${controller.strings.cantEmpty}',
                   controller: controller.emailController,
                   onSaved: (value) => controller.email = value,
                   onChanged: (value) {
@@ -76,13 +76,13 @@ class LoginView extends GetView<LoginController> {
                 Obx(
                   () => CustomInnputObscure(
                     labelText: "Password",
-                    hintText: "${controller.strings!.enterYour} password",
+                    hintText: "${controller.strings.enterYour} password",
                     isHiding: controller.isHiding.value,
                     onToggle: () {
                       controller.isHiding.value = !controller.isHiding.value;
                     },
-                    messageError1: "Password ${controller.strings!.cantEmpty}",
-                    messageError2: "Password ${controller.strings!.tooShort}",
+                    messageError1: "Password ${controller.strings.cantEmpty}",
+                    messageError2: "Password ${controller.strings.tooShort}",
                     controller: controller.passwordController,
                     onSaved: (value) => controller.password = value,
                     onChanged: (value) {
@@ -105,9 +105,11 @@ class LoginView extends GetView<LoginController> {
                     const Text("Remember me"),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(Routes.FORGOT_PASSWORD);
+                      },
                       child: Text(
-                        controller.strings!.forgotPassword,
+                        controller.strings.forgotPassword,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     )
@@ -122,7 +124,7 @@ class LoginView extends GetView<LoginController> {
                         controller.printEmailAndPassword();
                       }
                     },
-                    child: Text(controller.strings!.login),
+                    child: Text(controller.strings.login),
                   ),
                 ),
               ],
@@ -178,7 +180,7 @@ class LoginView extends GetView<LoginController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            controller.strings!.dontAccount,
+            controller.strings.dontAccount,
             style: AppColor.lightGreyTextStyle.copyWith(
               fontSize: 14,
             ),
@@ -188,7 +190,7 @@ class LoginView extends GetView<LoginController> {
               Get.toNamed(Routes.REGISTER),
             },
             child: Text(
-              controller.strings!.register,
+              controller.strings.register,
               style: AppColor.blackTextStyle.copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

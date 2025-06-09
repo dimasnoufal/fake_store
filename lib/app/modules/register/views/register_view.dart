@@ -207,38 +207,36 @@ class RegisterView extends GetView<RegisterController> {
       );
     }
 
-    return GetBuilder<RegisterController>(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            controller.strings!.register,
-            style: AppColor.blackTextStyle.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(
-            color: AppColor.blackTextStyle.color,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          controller.strings!.register,
+          style: AppColor.blackTextStyle.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                buildTittle(),
-                const SizedBox(height: 24),
-                buildFormRegister(),
-                const SizedBox(height: 24),
-                buildOptionalRegister(),
-                const SizedBox(height: 16),
-                buildText(),
-              ],
-            ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(
+          color: AppColor.blackTextStyle.color,
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              buildTittle(),
+              const SizedBox(height: 24),
+              buildFormRegister(),
+              const SizedBox(height: 24),
+              buildOptionalRegister(),
+              const SizedBox(height: 16),
+              buildText(),
+            ],
           ),
         ),
       ),

@@ -12,18 +12,19 @@ class LoginController extends GetxController {
   String? password;
   RxBool remember = false.obs;
   RxBool isHiding = true.obs;
-  final strings = AppLocalizations.of(Get.context!);
+  AppLocalizations get strings => AppLocalizations.of(Get.context!)!;
 
   // Initializing method
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey;
   late final Rx<SharedPreferences?> prefs;
 
   @override
   void onInit() {
     super.onInit();
     _initPrefs();
+    formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -53,7 +54,7 @@ class LoginController extends GetxController {
     Dialogs.errorDialog(
       context: context,
       function: () {},
-      message: strings!.messageFormLoginError,
+      message: strings.messageFormLoginError,
     );
     return false;
   }
