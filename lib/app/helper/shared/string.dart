@@ -2,7 +2,7 @@ import 'package:fake_store/app/data/models/on_boarding_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-String StorebaseUrl = 'https://fakestoreapi.com';
+String storeBaseUrl = 'https://fakestoreapi.com';
 
 List<OnboardingModel> items(BuildContext context) {
   final strings = AppLocalizations.of(context)!;

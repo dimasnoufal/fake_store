@@ -62,7 +62,7 @@ class LoginController extends GetxController {
   void printEmailAndPassword() {
     email = emailController.text;
     password = passwordController.text;
-    Get.toNamed(Routes.HOME);
+    Get.toNamed(Routes.HOME_MAIN);
     Logger.printInfo('Email: $email, Password: $password');
   }
 }
