@@ -71,7 +71,7 @@ class SplashController extends GetxController {
           Get.offAllNamed(Routes.LOGIN);
           break;
         case 2:
-          Get.offAllNamed(Routes.HOME);
+          Get.offAllNamed(Routes.HOME_MAIN);
           break;
         default:
           Get.offAllNamed(Routes.ON_BOARDING);

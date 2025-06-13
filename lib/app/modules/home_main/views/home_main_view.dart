@@ -32,18 +32,22 @@ class HomeMainView extends GetView<HomeMainController> {
           );
         },
         child: Scaffold(
-          body: PageTransitionSwitcher(
-            transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-              return SharedAxisTransition(
-                animation: primaryAnimation,
-                secondaryAnimation: secondaryAnimation,
-                transitionType: SharedAxisTransitionType.horizontal,
-                fillColor: AppColor.kLightColor,
-                child: child,
-              );
-            },
-            duration: const Duration(milliseconds: 300),
-            child: controller.pages[controller.currentIndex.value],
+          body: SafeArea(
+            top: false,
+            bottom: true,
+            child: PageTransitionSwitcher(
+              transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+                return SharedAxisTransition(
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.horizontal,
+                  fillColor: AppColor.kLightColor,
+                  child: child,
+                );
+              },
+              duration: const Duration(milliseconds: 300),
+              child: controller.pages[controller.currentIndex.value],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {

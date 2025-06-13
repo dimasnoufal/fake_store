@@ -117,29 +117,71 @@ class LoginView extends GetView<LoginController> {
                 ),
                 const SizedBox(height: 36),
                 Obx(
-                  () => SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (controller.validateAndSave(context)) {
-                          controller.printUsernameAndPassword();
-                          controller.doLogin();
-                        }
-                      },
-                      child: controller.isLoading.value
-                          ? SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 1,
-                              ),
-                            )
-                          : Text('Login',
-                              style: AppColor.whiteTextStyle.copyWith(
-                                fontSize: 16,
-                              )),
-                    ),
+                  () => Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (controller.validateAndSave(context)) {
+                                controller.printUsernameAndPassword();
+                                controller.doLogin();
+                              }
+                            },
+                            child: controller.isLoading.value
+                                ? SizedBox(
+                                    height: 22,
+                                    width: 22,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 1,
+                                    ),
+                                  )
+                                : Text('Login',
+                                    style: AppColor.whiteTextStyle.copyWith(
+                                      fontSize: 16,
+                                    )),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: controller.isLoadingBiometric.value
+                              ? null
+                              : controller.doLoginBiometric,
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height: 50,
+                            margin: const EdgeInsets.only(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: controller.isLoadingBiometric.value
+                                  ? AppColor.kPrimaryColor
+                                      .withOpacity(0.6) // Indikasi loading
+                                  : AppColor.kPrimaryColor,
+                            ),
+                            child: Center(
+                              child: controller.isLoadingBiometric.value
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.fingerprint,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
