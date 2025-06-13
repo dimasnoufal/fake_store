@@ -63,13 +63,13 @@ class LoginView extends GetView<LoginController> {
             child: Column(
               children: [
                 CustomInput(
-                  labelText: 'Email',
-                  hintText: '${controller.strings.enterYour} email',
-                  messageError: 'Email ${controller.strings.cantEmpty}',
-                  controller: controller.emailController,
-                  onSaved: (value) => controller.email = value,
+                  labelText: 'Username',
+                  hintText: '${controller.strings.enterYour} username',
+                  messageError: 'Username ${controller.strings.cantEmpty}',
+                  controller: controller.usernameController,
+                  onSaved: (value) => controller.username = value,
                   onChanged: (value) {
-                    controller.email = value;
+                    controller.username = value;
                   },
                 ),
                 const SizedBox(height: 20),
@@ -95,10 +95,10 @@ class LoginView extends GetView<LoginController> {
                   children: [
                     Obx(
                       () => Checkbox(
-                        value: controller.remember.value,
+                        value: controller.isRememberMe.value,
                         activeColor: AppColor.kPrimaryColor,
                         onChanged: (value) {
-                          controller.remember.value = value!;
+                          controller.isRememberMe.value = value!;
                         },
                       ),
                     ),
@@ -116,15 +116,30 @@ class LoginView extends GetView<LoginController> {
                   ],
                 ),
                 const SizedBox(height: 36),
-                Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (controller.validateAndSave(context)) {
-                        controller.printEmailAndPassword();
-                      }
-                    },
-                    child: Text(controller.strings.login),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (controller.validateAndSave(context)) {
+                          controller.printUsernameAndPassword();
+                          controller.doLogin();
+                        }
+                      },
+                      child: controller.isLoading.value
+                          ? SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 1,
+                              ),
+                            )
+                          : Text('Login',
+                              style: AppColor.whiteTextStyle.copyWith(
+                                fontSize: 16,
+                              )),
+                    ),
                   ),
                 ),
               ],

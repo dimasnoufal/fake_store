@@ -6,14 +6,17 @@ class Api {
   final String baseUrl;
   Api(this.baseUrl);
 
-  Future<dynamic> get(String endpoint) async {
+  Future<Map<String, dynamic>> get(String endpoint) async {
     final response = await http.get(Uri.parse('$baseUrl/$endpoint'), headers: {
       'Content-Type': 'application/json',
     });
-    return json.decode(response.body);
+    return <String, dynamic>{
+      'statusCode': response.statusCode,
+      'body': json.decode(response.body),
+    };
   }
 
-  Future<dynamic> post(String endpoint, dynamic data) async {
+  Future<Map<String, dynamic>> post(String endpoint, dynamic data) async {
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
       body: json.encode(data),
@@ -21,6 +24,9 @@ class Api {
         'Content-Type': 'application/json',
       },
     );
-    return json.decode(response.body);
+    return <String, dynamic>{
+      'statusCode': response.statusCode,
+      'body': json.decode(response.body),
+    };
   }
 }

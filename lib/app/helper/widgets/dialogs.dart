@@ -264,4 +264,22 @@ class Dialogs {
       enableDrag: false,
     );
   }
+
+  static loading() => Get.dialog(
+        PopScope(
+          canPop: false,
+          child: Center(
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Lottie.asset(
+                'assets/lottie/loading2.json',
+                repeat: true,
+                width: 100,
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
 }
