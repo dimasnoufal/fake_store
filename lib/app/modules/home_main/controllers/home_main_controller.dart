@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeMainController extends GetxController {
-  // Initializing variables
+  // Initializing variabless
   RxInt currentIndex = 0.obs;
   List<Widget> pages = [
     const HomeView(),

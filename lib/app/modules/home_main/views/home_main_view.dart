@@ -32,6 +32,7 @@ class HomeMainView extends GetView<HomeMainController> {
           );
         },
         child: Scaffold(
+          drawer: const NavigationDrawer(),
           body: SafeArea(
             top: false,
             bottom: true,
@@ -68,6 +69,45 @@ class HomeMainView extends GetView<HomeMainController> {
             currentIndex: controller.currentIndex.value,
             onNavTap: controller.changeIndex,
             controller: controller,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      elevation: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border(
+            right: BorderSide(
+              color: AppColor.kPrimaryColor,
+              width: 2,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(Icons.home, color: AppColor.kPrimaryColor),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(Icons.settings, color: AppColor.kPrimaryColor),
+              ),
+              // Tambahkan widget lain sesuai kebutuhan
+            ],
           ),
         ),
       ),

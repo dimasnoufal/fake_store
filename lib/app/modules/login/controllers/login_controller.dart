@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fake_store/app/data/api.dart';
 import 'package:fake_store/app/helper/shared/common_utils.dart';
 import 'package:fake_store/app/helper/shared/logger.dart';
@@ -88,50 +89,65 @@ class LoginController extends GetxController {
     // String uri = '${storeBaseUrl}/auth/login';
     // Logger.printInfo('Login URI: $uri');
 
-    try {
-      Api apiClient = Api(storeBaseUrl);
-      final responseLogin = await apiClient
-          .post('/auth/login', map)
-          .timeout(const Duration(seconds: 10));
+    bool isConnected = await checkConnectivity();
 
-      Logger.printInfo('Login response: ${responseLogin}');
-      Logger.printInfo(
-          'Info login response: ${responseLogin['statusCode']}, ${responseLogin['body']}');
-      if (responseLogin['statusCode'] == 200) {
-        Logger.printY('Token: ${responseLogin['body']['token']}');
-        prefs.value?.setString('token', responseLogin['body']['token']);
-        Logger.printInfo('Token prefs: ${prefs.value?.getString('token')}');
-        final user = <String, dynamic>{
-          'username': username,
-          'password': password,
-          // 'token': responseLogin['body']['token'],
-        };
-        Logger.printInfo('User data: $user');
-        prefs.value?.setString('user', json.encode(user));
-        prefs.value?.setString('token', responseLogin['body']['token']);
-        prefs.value?.setBool('isRememberMe', isRememberMe.value);
-        Get.offAllNamed(Routes.HOME_MAIN);
-      } else {
-        Logger.printX(
-            'Login failed with status code: ${responseLogin['statusCode']}');
+    if (isConnected) {
+      try {
+        Api apiClient = Api(storeBaseUrl);
+        final responseLogin = await apiClient
+            .post('/auth/login', map)
+            .timeout(const Duration(seconds: 10));
+
+        Logger.printInfo('Login response: ${responseLogin}');
+        Logger.printInfo(
+            'Info login response: ${responseLogin['statusCode']}, ${responseLogin['body']}');
+        if (responseLogin['statusCode'] == 200) {
+          Logger.printY('Token: ${responseLogin['body']['token']}');
+          prefs.value?.setString('token', responseLogin['body']['token']);
+          Logger.printInfo('Token prefs: ${prefs.value?.getString('token')}');
+          final user = <String, dynamic>{
+            'username': username,
+            'password': password,
+            // 'token': responseLogin['body']['token'],
+          };
+          Logger.printInfo('User data: $user');
+          prefs.value?.setString('user', json.encode(user));
+          prefs.value?.setString('token', responseLogin['body']['token']);
+          prefs.value?.setBool('isRememberMe', isRememberMe.value);
+          Get.offAllNamed(Routes.HOME_MAIN);
+        } else {
+          Logger.printX(
+              'Login failed with status code: ${responseLogin['statusCode']}');
+        }
+
+        // await Future.delayed(const Duration(seconds: 5)).then((_) {
+        //   isLoading.value = false;
+        //   update();
+        // });
+
+        isLoading.value = false;
+        update();
+      } catch (e) {
+        isLoading.value = false;
+        update();
+        Logger.printX('Login failed: $e');
+        Dialogs.errorDialog(
+          context: Get.context!,
+          function: () {},
+          message: e.toString(),
+        );
       }
-
-      // await Future.delayed(const Duration(seconds: 5)).then((_) {
-      //   isLoading.value = false;
-      //   update();
-      // });
-
-      isLoading.value = false;
-      update();
-    } catch (e) {
-      isLoading.value = false;
-      update();
-      Logger.printX('Login failed: $e');
-      Dialogs.errorDialog(
+    } else {
+      Dialogs.warningDialog(
         context: Get.context!,
-        function: () {},
-        message: e.toString(),
+        message: strings.connectionError,
+        function: () {
+          doLogin();
+        },
       );
+      isLoading.value = false;
+      update();
+      return;
     }
   }
 
@@ -149,107 +165,119 @@ class LoginController extends GetxController {
     }
 
     try {
-      if ((CommonUtils.falsyChecker(isRemberMePrefs) ||
-              isRemberMePrefs != true) ||
-          CommonUtils.falsyChecker(user)) {
-        Dialogs.errorDialog(
-          context: Get.context!,
-          function: () {},
-          message:
-              'Fitur biometrik belum diaktifkan. Silakan aktifkan di pengaturan untuk menggunakan autentikasi sidik jari.',
-        );
-        isLoadingBiometric.value = false;
-        update();
-        return;
-      } else {
-        isUserAuthenticated.value = await _localAuth.authenticate(
-            localizedReason: 'Authenticate Yourself',
-            options: AuthenticationOptions(
-              useErrorDialogs: true,
-              stickyAuth: true,
-              biometricOnly: true,
-            ));
+      bool isConnected = await checkConnectivity();
 
-        if (isUserAuthenticated.value) {
-          Logger.printY('User authenticated successfully');
-
-          print('Username: ${user!['username']}');
-          print('Password: ${user!['password']}');
-
-          var map = new Map<String, dynamic>();
-          map['username'] = CommonUtils.falsyChecker(user!['username'])
-              ? ''
-              : user!['username'];
-          map['password'] = CommonUtils.falsyChecker(user!['password'])
-              ? ''
-              : user!['password'];
-          // String uri = '${storeBaseUrl}/auth/login';
-          // Logger.printInfo('Login URI: $uri');
-
-          try {
-            Api apiClient = Api(storeBaseUrl);
-            final responseLogin = await apiClient
-                .post('/auth/login', map)
-                .timeout(const Duration(seconds: 10));
-
-            Logger.printInfo('Login response: ${responseLogin}');
-            Logger.printInfo(
-                'Info login response: ${responseLogin['statusCode']}, ${responseLogin['body']}');
-            if (responseLogin['statusCode'] == 200) {
-              Logger.printY('Token: ${responseLogin['body']['token']}');
-              prefs.value?.setString('token', responseLogin['body']['token']);
-              Logger.printInfo(
-                  'Token prefs: ${prefs.value?.getString('token')}');
-              final user = <String, dynamic>{
-                'username': username,
-                'password': password,
-              };
-              Logger.printInfo('User data: $user');
-              prefs.value?.setString('user', json.encode(user));
-              prefs.value?.setString('token', responseLogin['body']['token']);
-              prefs.value?.setBool('isRememberMe', isRememberMe.value);
-              Get.offAllNamed(Routes.HOME_MAIN);
-            } else {
-              Logger.printX(
-                  'Login failed with status code: ${responseLogin['statusCode']}');
-            }
-
-            isLoading.value = false;
-            update();
-          } on FormatException catch (e) {
-            isLoading.value = false;
-            update();
-            Logger.printX('Login failed: $e');
-            Dialogs.errorDialog(
-              context: Get.context!,
-              function: () {},
-              message:
-                  'Fitur biometrik belum diaktifkan. Silakan aktifkan di pengaturan untuk menggunakan autentikasi sidik jari.',
-            );
-          } catch (e) {
-            isLoading.value = false;
-            update();
-            Logger.printX('Login failed: $e');
-            Dialogs.errorDialog(
-              context: Get.context!,
-              function: () {},
-              message: e.toString(),
-            );
-          }
-
-          isLoadingBiometric.value = false;
-          update();
-        } else {
-          Logger.printX('User authentication failed');
+      if (isConnected) {
+        if ((CommonUtils.falsyChecker(isRemberMePrefs) ||
+                isRemberMePrefs != true) ||
+            CommonUtils.falsyChecker(user)) {
           Dialogs.errorDialog(
             context: Get.context!,
             function: () {},
-            message: 'Authentication failed. Please try again.',
+            message:
+                'Fitur biometrik belum diaktifkan. Silakan aktifkan di pengaturan untuk menggunakan autentikasi sidik jari.',
           );
           isLoadingBiometric.value = false;
           update();
-          // return;
+          return;
+        } else {
+          isUserAuthenticated.value = await _localAuth.authenticate(
+              localizedReason: 'Authenticate Yourself',
+              options: AuthenticationOptions(
+                useErrorDialogs: true,
+                stickyAuth: true,
+                biometricOnly: true,
+              ));
+
+          if (isUserAuthenticated.value) {
+            Logger.printY('User authenticated successfully');
+
+            print('Username: ${user!['username']}');
+            print('Password: ${user!['password']}');
+
+            var map = new Map<String, dynamic>();
+            map['username'] = CommonUtils.falsyChecker(user!['username'])
+                ? ''
+                : user!['username'];
+            map['password'] = CommonUtils.falsyChecker(user!['password'])
+                ? ''
+                : user!['password'];
+            // String uri = '${storeBaseUrl}/auth/login';
+            // Logger.printInfo('Login URI: $uri');
+
+            try {
+              Api apiClient = Api(storeBaseUrl);
+              final responseLogin = await apiClient
+                  .post('/auth/login', map)
+                  .timeout(const Duration(seconds: 10));
+
+              Logger.printInfo('Login response: ${responseLogin}');
+              Logger.printInfo(
+                  'Info login response: ${responseLogin['statusCode']}, ${responseLogin['body']}');
+              if (responseLogin['statusCode'] == 200) {
+                Logger.printY('Token: ${responseLogin['body']['token']}');
+                prefs.value?.setString('token', responseLogin['body']['token']);
+                Logger.printInfo(
+                    'Token prefs: ${prefs.value?.getString('token')}');
+                final user = <String, dynamic>{
+                  'username': username,
+                  'password': password,
+                };
+                Logger.printInfo('User data: $user');
+                prefs.value?.setString('user', json.encode(user));
+                prefs.value?.setString('token', responseLogin['body']['token']);
+                prefs.value?.setBool('isRememberMe', isRememberMe.value);
+                Get.offAllNamed(Routes.HOME_MAIN);
+              } else {
+                Logger.printX(
+                    'Login failed with status code: ${responseLogin['statusCode']}');
+              }
+
+              isLoading.value = false;
+              update();
+            } on FormatException catch (e) {
+              isLoading.value = false;
+              update();
+              Logger.printX('Login failed: $e');
+              Dialogs.errorDialog(
+                context: Get.context!,
+                function: () {},
+                message:
+                    'Fitur biometrik belum diaktifkan. Silakan aktifkan di pengaturan untuk menggunakan autentikasi sidik jari.',
+              );
+            } catch (e) {
+              isLoading.value = false;
+              update();
+              Logger.printX('Login failed: $e');
+              Dialogs.errorDialog(
+                context: Get.context!,
+                function: () {},
+                message: e.toString(),
+              );
+            }
+
+            isLoadingBiometric.value = false;
+            update();
+          } else {
+            Logger.printX('User authentication failed');
+            Dialogs.errorDialog(
+              context: Get.context!,
+              function: () {},
+              message: 'Authentication failed. Please try again.',
+            );
+            isLoadingBiometric.value = false;
+            update();
+            // return;
+          }
         }
+      } else {
+        Dialogs.warningDialog(
+          context: Get.context!,
+          message: strings.connectionError,
+          function: () {
+            doLoginBiometric();
+          },
+        );
       }
     } catch (e) {
       isLoadingBiometric.value = false;
@@ -260,6 +288,17 @@ class LoginController extends GetxController {
         function: () {},
         message: e.toString(),
       );
+    }
+  }
+
+  Future<bool> checkConnectivity() async {
+    final List<ConnectivityResult> connectivityResult =
+        await (Connectivity().checkConnectivity());
+    if (connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi)) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
