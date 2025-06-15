@@ -85,7 +85,6 @@ class NavigationDrawer extends StatelessWidget {
       elevation: 0,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.transparent,
           border: Border(
             right: BorderSide(
               color: AppColor.kPrimaryColor,
@@ -100,13 +99,43 @@ class NavigationDrawer extends StatelessWidget {
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Icon(Icons.home, color: AppColor.kPrimaryColor),
+                child: Row(
+                  children: [
+                    Icon(Icons.home, color: AppColor.kPrimaryColor),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Home',
+                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Icon(Icons.settings, color: AppColor.kPrimaryColor),
+                child: Row(
+                  children: [
+                    Icon(Icons.category, color: AppColor.kPrimaryColor),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Categories',
+                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
-              // Tambahkan widget lain sesuai kebutuhan
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.info, color: AppColor.kPrimaryColor),
+                    const SizedBox(width: 10),
+                    Text(
+                      'About',
+                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
