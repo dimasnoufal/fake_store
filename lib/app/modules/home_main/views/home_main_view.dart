@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:animations/animations.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/app/helper/shared/logger.dart';
@@ -21,18 +19,12 @@ class HomeMainView extends GetView<HomeMainController> {
         onPopInvokedWithResult: (value, result) {
           Logger.printInfo(('Pop invoked with result: $result'));
           Logger.printInfo(('Pop invoked with value: $value'));
-          Get.defaultDialog(
-            title: 'Exit',
-            middleText: 'Are you sure you want to exit?',
-            textConfirm: 'Yes',
-            textCancel: 'No',
-            onConfirm: () {
-              exit(0);
-            },
-          );
+          controller.showExitDialog();
         },
         child: Scaffold(
-          drawer: const NavigationDrawer(),
+          drawer: NavigationDrawer(
+            controller: controller,
+          ),
           body: SafeArea(
             top: false,
             bottom: true,
@@ -51,15 +43,18 @@ class HomeMainView extends GetView<HomeMainController> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
             onPressed: () {
               controller.changeIndex(2);
             },
-            backgroundColor: AppColor.kPrimaryColor,
+            backgroundColor: AppColor.kSecondaryColor,
             child: SvgPicture.asset('assets/icons/cart.svg',
                 colorFilter: ColorFilter.mode(
                   controller.currentIndex.value == 2
                       ? AppColor.kLightColor
-                      : AppColor.kSecondaryColor,
+                      : AppColor.kLightColor.withOpacity(0.5),
                   BlendMode.srcIn,
                 )),
           ),
@@ -77,7 +72,8 @@ class HomeMainView extends GetView<HomeMainController> {
 }
 
 class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({super.key});
+  final HomeMainController controller;
+  const NavigationDrawer({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -96,45 +92,78 @@ class NavigationDrawer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.home, color: AppColor.kPrimaryColor),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Home',
-                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+              const SizedBox(height: 24),
+              Center(
+                child: Container(
+                  width: 80, // 2 x radius
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColor.kPrimaryColor, // warna border
+                      width: 3, // tebal border
                     ),
-                  ],
+                  ),
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage('assets/images/logo_no_bg.png'),
+                    backgroundColor: Colors.transparent,
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.category, color: AppColor.kPrimaryColor),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Categories',
-                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
-                    ),
-                  ],
+              const SizedBox(height: 12),
+              Center(
+                child: Text(
+                  controller.userData?['username'],
+                  style: AppColor.blackTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.info, color: AppColor.kPrimaryColor),
-                    const SizedBox(width: 10),
-                    Text(
-                      'About',
-                      style: AppColor.blackTextStyle.copyWith(fontSize: 16),
-                    ),
-                  ],
+              const SizedBox(height: 4),
+              Center(
+                child: Text(
+                  '${controller.userData?['username']}@example.com',
+                  style: AppColor.lightGreyTextStyle.copyWith(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+              ),
+              const SizedBox(height: 24),
+              Divider(color: Colors.grey[300]),
+              ListTile(
+                leading: Icon(Icons.description_outlined,
+                    color: AppColor.kPrimaryColor),
+                title: Text(
+                  'Syarat & Ketentuan',
+                  style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading:
+                    Icon(Icons.info_outline, color: AppColor.kPrimaryColor),
+                title: Text(
+                  'Versi Aplikasi',
+                  style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                ),
+                trailing: Text(
+                  controller.packageInfo.value.version,
+                  style: AppColor.lightGreyTextStyle,
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.feedback_outlined,
+                    color: AppColor.kPrimaryColor),
+                title: Text(
+                  'Feedback & Kritik',
+                  style: AppColor.blackTextStyle.copyWith(fontSize: 16),
+                ),
+                onTap: () {},
               ),
             ],
           ),

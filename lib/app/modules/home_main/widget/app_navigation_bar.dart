@@ -17,45 +17,51 @@ class AppNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 14,
-      color: AppColor.kPrimaryColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BottomAppBarItem(
-            name: 'Home',
-            iconLocation: 'assets/icons/home.svg',
-            isActive: currentIndex == 0,
-            onTap: () => onNavTap(0),
-          ),
-          BottomAppBarItem(
-            name: 'Order',
-            iconLocation: 'assets/icons/order.svg',
-            isActive: currentIndex == 1,
-            onTap: () => onNavTap(1),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(14 * 2),
-            child: SizedBox(width: 14),
-          ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(24), // atur sesuai kebutuhan
+        topRight: Radius.circular(24),
+      ),
+      child: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 7,
+        color: AppColor.kPrimaryColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BottomAppBarItem(
+              name: 'Home',
+              iconLocation: 'assets/icons/home.svg',
+              isActive: currentIndex == 0,
+              onTap: () => onNavTap(0),
+            ),
+            BottomAppBarItem(
+              name: 'Order',
+              iconLocation: 'assets/icons/order.svg',
+              isActive: currentIndex == 1,
+              onTap: () => onNavTap(1),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(14 * 2),
+              child: SizedBox(width: 14),
+            ),
 
-          /* <---- We have to leave this 3rd index (2) for the cart item -----> */
+            /* <---- We have to leave this 3rd index (2) for the cart item -----> */
 
-          BottomAppBarItem(
-            name: 'Save',
-            iconLocation: 'assets/icons/save.svg',
-            isActive: currentIndex == 3,
-            onTap: () => onNavTap(3),
-          ),
-          BottomAppBarItem(
-            name: 'Profile',
-            iconLocation: 'assets/icons/profile.svg',
-            isActive: currentIndex == 4,
-            onTap: () => onNavTap(4),
-          ),
-        ],
+            BottomAppBarItem(
+              name: 'Save',
+              iconLocation: 'assets/icons/save.svg',
+              isActive: currentIndex == 3,
+              onTap: () => onNavTap(3),
+            ),
+            BottomAppBarItem(
+              name: 'Profile',
+              iconLocation: 'assets/icons/profile.svg',
+              isActive: currentIndex == 4,
+              onTap: () => onNavTap(4),
+            ),
+          ],
+        ),
       ),
     );
   }

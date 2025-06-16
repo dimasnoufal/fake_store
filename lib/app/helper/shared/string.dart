@@ -75,3 +75,45 @@ Your privacy matters to us.
 
 If you have questions or concerns, contact us at support@example.com.
 ''';
+
+List<String> backgroundSpecial = [
+  'https://www.shutterstock.com/image-photo/closeup-womans-hand-holding-cell-260nw-2192933767.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh-mUEXYUJ9RdlULH_DQ-LiSy4Q_E6bCTIlw&s',
+  'https://img.freepik.com/premium-photo/sport-composition-with-modern-elements_23-2147914166.jpg',
+];
+
+List<String> tittleSpecial = [
+  'Smartphone',
+  'Fashion',
+  'Sports & Fitness',
+];
+
+List<String> subtitleSpecial = [
+  '10 Brands',
+  '7 Brands',
+  '5 Brands',
+];
+
+List<String> newProduct = [
+  'https://pngimg.com/uploads/dress/dress_PNG65.png', // Dress :contentReference[oaicite:1]{index=1}
+  'https://pngimg.com/uploads/suit/suit_PNG93219.png', // Suit :contentReference[oaicite:2]{index=2}
+  'https://pngimg.com/uploads/dress/dress_PNG191.png', // Coat (generic) :contentReference[oaicite:3]{index=3}
+  'https://pngimg.com/uploads/dress_shirt/dress_shirt_PNG8091.png', // Dress Shirt :contentReference[oaicite:4]{index=4}
+  'https://pngimg.com/uploads/coat/coat_PNG80.png', // Sweater :contentReference[oaicite:5]{index=5}
+];
+
+List<String> tittleNewProduct = [
+  'Elegant Dress',
+  'Business Suit',
+  'Wedding Dress',
+  'Classic Dress Shirt',
+  'Coat Sweater',
+];
+
+List<String> priceNewProduct = [
+  '\$120',
+  '\$220',
+  '\$180',
+  '\$90',
+  '\$85',
+];

@@ -4,6 +4,7 @@ import 'package:fake_store/app/services/http_service.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,6 +17,8 @@ void main() async {
 
   // Override the default HttpClient to allow self-signed certificates
   HttpOverrides.global = HttpService();
+
+  // debugPaintSizeEnabled = true;
 
   // running the app
   runApp(MyApp());
