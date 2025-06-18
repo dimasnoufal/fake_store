@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:photo_view/photo_view.dart';
 
 class Dialogs {
   static Future<void> successDialog({
@@ -281,5 +282,125 @@ class Dialogs {
           ),
         ),
         barrierDismissible: false,
+      );
+
+  static imgDialog(
+          {required BuildContext context,
+          double? width,
+          double? height,
+          String? url}) =>
+      showDialog(
+        context: context,
+        builder: ((context) => AlertDialog(
+              surfaceTintColor: Colors.white,
+              contentPadding: EdgeInsets.zero,
+              insetPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              content: Container(
+                height: Get.size.height,
+                width: Get.size.width,
+                child: PhotoView(
+                  customSize: Size(width ?? 400, height ?? 400),
+                  enableRotation: false,
+                  imageProvider: url != null && url.startsWith('http')
+                      ? NetworkImage(url)
+                      : AssetImage(url ?? '') as ImageProvider,
+                  loadingBuilder: (context, event) => const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.kPrimaryColor,
+                    ),
+                  ),
+                  errorBuilder: (context, error, stackTrace) {
+                    if (error is NetworkImageLoadException &&
+                        error.statusCode == 404) {
+                      return Center(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Lottie.asset(
+                            'assets/lottie/error_image.json',
+                            repeat: false,
+                            height: 150,
+                            width: 150,
+                          ),
+                          const Text(
+                            'Image not found',
+                            style: TextStyle(
+                                color: AppColor.kPrimaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                          ),
+                        ],
+                      ));
+                    }
+                    return Center(
+                        child: const Text(
+                      'Error Load Image',
+                      style: TextStyle(
+                          color: AppColor.kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ));
+                  },
+                ),
+              ),
+            )),
+      );
+
+  static imgCustomDialog(
+          {required BuildContext context,
+          double? width,
+          double? height,
+          dynamic child}) =>
+      showDialog(
+        context: context,
+        builder: ((context) => AlertDialog(
+              surfaceTintColor: Colors.white,
+              contentPadding: EdgeInsets.all(0),
+              content: SizedBox(
+                height: height,
+                width: width,
+                child: PhotoView(
+                  enableRotation: false,
+                  imageProvider: child,
+                  loadingBuilder: (context, event) => const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.kPrimaryColor,
+                    ),
+                  ),
+                  errorBuilder: (context, error, stackTrace) {
+                    if (error is NetworkImageLoadException &&
+                        error.statusCode == 404) {
+                      return Center(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Lottie.asset(
+                            'assets/lottie/error_image.json',
+                            repeat: false,
+                            height: 150,
+                            width: 150,
+                          ),
+                          const Text(
+                            'Image not found',
+                            style: TextStyle(
+                                color: AppColor.kPrimaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                          ),
+                        ],
+                      ));
+                    }
+                    return Center(
+                        child: const Text(
+                      'Error Load Image',
+                      style: TextStyle(
+                          color: AppColor.kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ));
+                  },
+                ),
+              ),
+            )),
       );
 }

@@ -1,6 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
+import 'package:fake_store/app/helper/shared/enum.dart';
 import 'package:fake_store/app/helper/shared/string.dart';
+import 'package:fake_store/app/helper/widgets/shimmers.dart';
+import 'package:fake_store/app/helper/widgets/state_custom.dart';
+import 'package:fake_store/app/modules/home/views/popular_all_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -222,7 +227,11 @@ class HomeView extends GetView<HomeController> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(PopularAllView(
+                    controller: controller,
+                  ));
+                },
                 child: Text(
                   'See all',
                   style: AppColor.lightGreyTextStyle.copyWith(
@@ -234,78 +243,104 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 200,
-            child: CustomScrollView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: SizedBox(
-                          width: 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide(
-                                      color: AppColor.kPrimaryColor,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {},
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Ink.image(
-                                      image: NetworkImage(
-                                        'https://1souvenir.id/wp-content/uploads/schema-and-structured-data-for-wp/LG203-Tas-kulit-1200x1439.jpg',
+          controller.requestStatus == requestState.isSuccess &&
+                  controller.dataGetProduct.isNotEmpty
+              ? SizedBox(
+                  height: 200,
+                  child: CustomScrollView(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: SizedBox(
+                                width: 150,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          side: BorderSide(
+                                            color: AppColor.kPrimaryColor,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {},
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Ink.image(
+                                              image: CachedNetworkImageProvider(
+                                                controller.dataGetProduct[index]
+                                                        ['image'] ??
+                                                    '',
+                                              ),
+                                              fit: BoxFit.contain,
+                                              width: 135,
+                                              height: 135,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      fit: BoxFit.fill,
-                                      width: 150,
-                                      height: 150,
                                     ),
-                                  ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      controller.dataGetProduct[index]
+                                              ['title'] ??
+                                          'No Title',
+                                      style:
+                                          AppColor.darkGreyTextStyle.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    Text(
+                                      '\$${(controller.dataGetProduct[index]['price'] ?? 0).toStringAsFixed(2)}',
+                                      style:
+                                          AppColor.darkGreyTextStyle.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Product $index',
-                                style: AppColor.darkGreyTextStyle.copyWith(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                '\$${(index + 1) * 10}',
-                                style: AppColor.darkGreyTextStyle.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
+                            );
+                          },
+                          childCount: 5,
                         ),
-                      );
-                    },
-                    childCount: 5,
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
+                )
+              : controller.requestStatus == requestState.isLoading
+                  ? LoadingPopularProducts(
+                      count: 5,
+                      widthCard: 150,
+                      heightCard: 200,
+                      baseColor: AppColor.kTertiaryColor,
+                      highColor: const Color(0xFFcccccc),
+                    )
+                  : StateCustom.Empty(
+                      title: 'No Popular Products',
+                      description:
+                          'Currently, there are no popular products available.',
+                    ),
         ],
       );
     }
@@ -370,12 +405,26 @@ class HomeView extends GetView<HomeController> {
                                     height: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          newProduct[index],
-                                        ),
-                                        fit: BoxFit.cover,
+                                      // image: DecorationImage(
+                                      //   image: NetworkImage(
+                                      //     newProduct[index],
+                                      //   ),
+                                      //   fit: BoxFit.cover,
+                                      // ),
+                                    ),
+                                    child: CachedNetworkImage(
+                                      imageUrl: newProduct[index],
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          Shimmers.shimmerCustom(
+                                        width: 100,
+                                        height: 100,
+                                        circular: 8,
+                                        baseColor: AppColor.kTertiaryColor,
+                                        highColor: const Color(0xFFcccccc),
                                       ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                     ),
                                   ),
                                   title: Text(
@@ -418,7 +467,9 @@ class HomeView extends GetView<HomeController> {
         return RefreshIndicator(
           displacement: 110,
           onRefresh: () async {
-            await Future.delayed(Duration(seconds: 1));
+            await Future.delayed(Duration(seconds: 2)).then((_) {
+              controller.getAllHomeData();
+            });
           },
           child: Obx(
             () => CustomScrollView(
@@ -503,6 +554,75 @@ class HomeView extends GetView<HomeController> {
           ),
         );
       },
+    );
+  }
+}
+
+class LoadingPopularProducts extends StatelessWidget {
+  final int? count;
+  final double? widthCard;
+  final double? heightCard;
+  final Color? baseColor;
+  final Color? highColor;
+  final Color? backgroundColor;
+
+  const LoadingPopularProducts({
+    super.key,
+    this.count = 5,
+    this.widthCard = 150,
+    this.heightCard = 200,
+    this.baseColor,
+    this.highColor,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: heightCard,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: count!,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: SizedBox(
+              width: widthCard,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Shimmer untuk gambar
+                  Shimmers.shimmerCustom(
+                    width: widthCard,
+                    height: 150,
+                    circular: 10,
+                    baseColor: baseColor ?? AppColor.kTertiaryColor,
+                    highColor: highColor ?? const Color(0xFFcccccc),
+                  ),
+                  const SizedBox(height: 10),
+                  // Shimmer untuk title
+                  Shimmers.shimmerCustom(
+                    width: 100,
+                    height: 12,
+                    circular: 4,
+                    baseColor: baseColor ?? AppColor.kTertiaryColor,
+                    highColor: highColor ?? const Color(0xFFcccccc),
+                  ),
+                  const SizedBox(height: 6),
+                  // Shimmer untuk harga
+                  Shimmers.shimmerCustom(
+                    width: 60,
+                    height: 10,
+                    circular: 4,
+                    baseColor: baseColor ?? AppColor.kTertiaryColor,
+                    highColor: highColor ?? const Color(0xFFcccccc),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

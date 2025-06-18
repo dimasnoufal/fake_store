@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/app/helper/shared/logger.dart';
+import 'package:fake_store/app/helper/widgets/dialogs.dart';
 import 'package:fake_store/app/modules/home_main/widget/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -104,10 +105,22 @@ class NavigationDrawer extends StatelessWidget {
                       width: 3, // tebal border
                     ),
                   ),
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage('assets/images/logo_no_bg.png'),
-                    backgroundColor: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      Dialogs.imgDialog(
+                        context: context,
+                        url: 'assets/images/logo_no_bg.png',
+                        width: 400,
+                        height: 400,
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage:
+                          AssetImage('assets/images/logo_no_bg.png'),
+                      backgroundColor: Colors.transparent,
+                    ),
                   ),
                 ),
               ),

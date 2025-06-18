@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fake_store/app/data/api.dart';
 import 'package:fake_store/app/helper/shared/common_utils.dart';
 import 'package:fake_store/app/helper/shared/logger.dart';
 import 'package:fake_store/app/helper/shared/string.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
 import 'package:fake_store/app/routes/app_pages.dart';
+import 'package:fake_store/app/services/check_connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
@@ -89,7 +89,7 @@ class LoginController extends GetxController {
     // String uri = '${storeBaseUrl}/auth/login';
     // Logger.printInfo('Login URI: $uri');
 
-    bool isConnected = await checkConnectivity();
+    bool isConnected = await CheckConnectivity.isConnected();
 
     if (isConnected) {
       try {
@@ -165,7 +165,7 @@ class LoginController extends GetxController {
     }
 
     try {
-      bool isConnected = await checkConnectivity();
+      bool isConnected = await CheckConnectivity.isConnected();
 
       if (isConnected) {
         if ((CommonUtils.falsyChecker(isRemberMePrefs) ||
@@ -288,17 +288,6 @@ class LoginController extends GetxController {
         function: () {},
         message: e.toString(),
       );
-    }
-  }
-
-  Future<bool> checkConnectivity() async {
-    final List<ConnectivityResult> connectivityResult =
-        await (Connectivity().checkConnectivity());
-    if (connectivityResult.contains(ConnectivityResult.mobile) ||
-        connectivityResult.contains(ConnectivityResult.wifi)) {
-      return true;
-    } else {
-      return false;
     }
   }
 }
