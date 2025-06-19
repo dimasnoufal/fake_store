@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/detail_item/bindings/detail_item_binding.dart';
+import '../modules/detail_item/views/detail_item_view.dart';
 import '../modules/forgot_password/bindings/forgot_password_binding.dart';
 import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.HOME_MAIN,
       page: () => const HomeMainView(),
       binding: HomeMainBinding(),
+    ),
+    GetPage(
+      name: '${_Paths.DETAIL_ITEM}/:id',
+      page: () => const DetailItemView(),
+      binding: DetailItemBinding(),
     ),
   ];
 }

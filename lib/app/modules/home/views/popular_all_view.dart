@@ -3,6 +3,7 @@ import 'package:fake_store/app/helper/shared/enum.dart';
 import 'package:fake_store/app/helper/widgets/shimmers.dart';
 import 'package:fake_store/app/helper/widgets/state_custom.dart';
 import 'package:fake_store/app/modules/home/controllers/home_controller.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -64,7 +65,11 @@ class PopularAllView extends GetView {
                             ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10),
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(
+                                  '${Routes.DETAIL_ITEM}/${product['id']}',
+                                );
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Ink.image(

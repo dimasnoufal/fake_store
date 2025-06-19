@@ -6,6 +6,7 @@ import 'package:fake_store/app/helper/shared/string.dart';
 import 'package:fake_store/app/helper/widgets/shimmers.dart';
 import 'package:fake_store/app/helper/widgets/state_custom.dart';
 import 'package:fake_store/app/modules/home/views/popular_all_view.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -275,7 +276,11 @@ class HomeView extends GetView<HomeController> {
                                           ),
                                         ),
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Get.toNamed(
+                                              '${Routes.DETAIL_ITEM}/${controller.dataGetProduct[index]['id']}',
+                                            );
+                                          },
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           child: Padding(
