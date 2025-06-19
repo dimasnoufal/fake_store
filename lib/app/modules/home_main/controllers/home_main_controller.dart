@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fake_store/app/helper/shared/logger.dart';
+import 'package:fake_store/app/modules/cart/views/cart_view.dart';
+import 'package:fake_store/app/modules/favorite/views/favorite_view.dart';
 import 'package:fake_store/app/modules/home/views/home_view.dart';
+import 'package:fake_store/app/modules/order/views/order_view.dart';
+import 'package:fake_store/app/modules/profile/views/profile_view.dart';
 import 'package:fake_store/app/services/battery_optimizer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,10 +19,10 @@ class HomeMainController extends GetxController {
   RxInt currentIndex = 0.obs;
   List<Widget> pages = [
     const HomeView(),
-    const HomeView(),
-    const HomeView(),
-    const HomeView(),
-    const HomeView(),
+    const OrderView(),
+    const CartView(),
+    const FavoriteView(),
+    const ProfileView(),
   ];
 
   // Initializinng method

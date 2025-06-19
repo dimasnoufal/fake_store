@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class DetailItemController extends GetxController {
   // Initializing variables
   RxInt selectedImage = 0.obs;
+  RxInt selectedColor = 0.obs;
+  RxInt countItem = 0.obs;
   RxBool isShowMore = false.obs;
   final id = Get.parameters['id'];
   final requestStatus = requestState.isEmpty.obs;
@@ -38,6 +40,14 @@ class DetailItemController extends GetxController {
 
   void checkId() {
     Logger.printInfo('Id $id');
+  }
+
+  void addItem() => countItem.value++;
+
+  void removeItem() {
+    if (countItem.value > 0) {
+      countItem.value--;
+    }
   }
 
   Future<void> getProduct() async {

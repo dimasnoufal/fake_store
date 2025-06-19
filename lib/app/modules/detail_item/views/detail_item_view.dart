@@ -234,80 +234,107 @@ class DetailItemView extends GetView<DetailItemController> {
     }
 
     Widget _buildColorDots(Product product) {
-      Widget _buildColorDot(Color color, bool isSelected) {
-        return Container(
-          margin: const EdgeInsets.only(right: 2),
-          padding: const EdgeInsets.all(8),
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(
-                color:
-                    isSelected ? AppColor.kPrimaryColor : Colors.transparent),
-            shape: BoxShape.circle,
-          ),
-          child: DecoratedBox(
+      Widget _buildColorDot(Color color, bool isSelected, VoidCallback onTap) {
+        return GestureDetector(
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.only(right: 2),
+            padding: const EdgeInsets.all(8),
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
-              color: color,
+              color: Colors.transparent,
+              border: Border.all(
+                  color:
+                      isSelected ? AppColor.kPrimaryColor : Colors.transparent),
               shape: BoxShape.circle,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
             ),
           ),
         );
       }
 
-      int selectedColor = 3;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          children: [
-            ...List.generate(
-              product.colors.length,
-              (index) => _buildColorDot(
-                product.colors[index],
-                index == selectedColor,
-              ),
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(
-                  side: BorderSide(
-                    color: AppColor.kPrimaryColor,
-                    width: 1.5,
-                  ),
+        child: Obx(
+          () => Row(
+            children: [
+              ...List.generate(
+                product.colors.length,
+                (index) => _buildColorDot(
+                  product.colors[index],
+                  index == controller.selectedColor.value,
+                  () {
+                    controller.selectedColor.value = index;
+                  },
                 ),
-                padding: EdgeInsets.zero,
-                backgroundColor: AppColor.kLightColor,
-                overlayColor: AppColor.kPrimaryColor.withOpacity(0.5),
               ),
-              child: const Icon(
-                Icons.remove,
-                color: AppColor.kPrimaryColor,
-                size: 20,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(
-                  side: BorderSide(
-                    color: AppColor.kPrimaryColor,
-                    width: 1.5,
+              const Spacer(),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.removeItem();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(
+                        side: BorderSide(
+                          color: AppColor.kPrimaryColor,
+                          width: 1.5,
+                        ),
+                      ),
+                      padding: EdgeInsets.zero,
+                      backgroundColor: AppColor.kLightColor,
+                      overlayColor: AppColor.kPrimaryColor.withOpacity(0.5),
+                    ),
+                    child: const Icon(
+                      Icons.remove,
+                      color: AppColor.kPrimaryColor,
+                      size: 20,
+                    ),
                   ),
-                ),
-                padding: EdgeInsets.zero,
-                backgroundColor: AppColor.kLightColor,
-                overlayColor: AppColor.kPrimaryColor.withOpacity(0.5),
+                  SizedBox(
+                    width: 20,
+                    child: Center(
+                      child: Text(
+                        controller.countItem.value.toString(),
+                        style: AppColor.blackTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.addItem();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(
+                        side: BorderSide(
+                          color: AppColor.kPrimaryColor,
+                          width: 1.5,
+                        ),
+                      ),
+                      padding: EdgeInsets.zero,
+                      backgroundColor: AppColor.kLightColor,
+                      overlayColor: AppColor.kPrimaryColor.withOpacity(0.5),
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: AppColor.kPrimaryColor,
+                      size: 20,
+                    ),
+                  ),
+                ],
               ),
-              child: const Icon(
-                Icons.add,
-                color: AppColor.kPrimaryColor,
-                size: 20,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }

@@ -49,8 +49,8 @@ class AppNavigationBar extends StatelessWidget {
             /* <---- We have to leave this 3rd index (2) for the cart item -----> */
 
             BottomAppBarItem(
-              name: 'Save',
-              iconLocation: 'assets/icons/save.svg',
+              name: 'Favorite',
+              iconLocation: 'assets/icons/heart.svg',
               isActive: currentIndex == 3,
               onTap: () => onNavTap(3),
             ),
