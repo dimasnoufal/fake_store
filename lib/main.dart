@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fake_store/app/services/favorite_service%20.dart';
 import 'package:fake_store/app/services/http_service.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/l10n/l10n.dart';
@@ -17,6 +18,9 @@ void main() async {
 
   // Override the default HttpClient to allow self-signed certificates
   HttpOverrides.global = HttpService();
+
+  // Initialize favorite service
+  await Get.putAsync(() => FavoriteService().init());
 
   // debugPaintSizeEnabled = true;
 

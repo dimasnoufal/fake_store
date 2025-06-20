@@ -1,12 +1,14 @@
+import 'package:fake_store/app/data/models/cart_item.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
-  //TODO: Implement CartController
+  //Initialze variables
+  RxDouble totalPrice = 0.0.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    total();
   }
 
   @override
@@ -19,5 +21,9 @@ class CartController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void total() {
+    demoCarts.forEach((cart) {
+      totalPrice.value += cart.product.price * cart.numOfItem;
+    });
+  }
 }

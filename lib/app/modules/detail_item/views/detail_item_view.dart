@@ -99,9 +99,7 @@ class DetailItemView extends GetView<DetailItemController> {
     }
 
     Widget _buildProductDescription(
-        {ProductItem? productItem,
-        Product? product,
-        GestureTapCallback? pressOnSeeMore}) {
+        {ProductItem? productItem, GestureTapCallback? pressOnSeeMore}) {
       return Obx(
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +117,7 @@ class DetailItemView extends GetView<DetailItemController> {
                 padding: const EdgeInsets.all(16),
                 width: 48,
                 decoration: BoxDecoration(
-                  color: product!.isFavourite
+                  color: controller.isFav.value
                       ? const Color(0xFFFFE6E6)
                       : const Color(0xFFF5F6F9),
                   borderRadius: const BorderRadius.only(
@@ -133,10 +131,10 @@ class DetailItemView extends GetView<DetailItemController> {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        product.isFavourite = !product.isFavourite;
+                        controller.toggleFavorite();
                       },
                       child: Icon(
-                        product.isFavourite
+                        controller.isFav.value
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: const Color(0xFFFF4848),
@@ -411,7 +409,6 @@ class DetailItemView extends GetView<DetailItemController> {
                       children: [
                         _buildProductDescription(
                           productItem: controller.dataGetProduct,
-                          product: sampleProduct,
                           pressOnSeeMore: () {},
                         ),
                         _buildTopRoundedCorner(

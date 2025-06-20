@@ -1,48 +1,5 @@
 import 'package:flutter/material.dart';
 
-class Product {
-  final int id;
-  final String title, description;
-  final List<String> images;
-  final List<Color> colors;
-  final double rating, price;
-  bool isFavourite, isPopular;
-
-  Product({
-    required this.id,
-    required this.images,
-    required this.colors,
-    this.rating = 0.0,
-    this.isFavourite = false,
-    this.isPopular = false,
-    required this.title,
-    required this.price,
-    required this.description,
-  });
-}
-
-Product sampleProduct = Product(
-  id: 1,
-  title: 'Sample Product',
-  description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae leo eu sapien ultrices pellentesque ut ut orci. Curabitur posuere, diam eu dapibus pharetra, eros diam iaculis mauris, at ultrices augue sapien quis massa. Ut tortor massa, tincidunt consequat vulputate eu, molestie sed magna. Ut urna augue, viverra ac sagittis at, vehicula sagittis elit. Sed gravida urna vitae diam rutrum, in vehicula quam sodales. Proin blandit dolor et lacus vestibulum, a dignissim turpis accumsan. Nulla non turpis semper, accumsan turpis ut, sodales libero. Cras ut odio posuere, cursus risus vel, laoreet tortor. Ut rhoncus lectus ipsum, sit amet dignissim justo tincidunt id. Praesent laoreet odio vel diam efficitur tempor. Proin sagittis commodo dapibus. Phasellus tincidunt massa orci, non convallis turpis efficitur a. Proin consectetur pretium urna, sed varius dui tempus sit amet. Nam consectetur gravida mi, at iaculis diam posuere ut. Ut eleifend ligula ut justo eleifend, eu malesuada nunc consequat. Suspendisse eget maximus mauris, nec mollis ipsum.',
-  images: [
-    "assets/images/ilustration_1.png",
-    "assets/images/ilustration_2.png",
-    "assets/images/ilustration_3.png",
-  ],
-  colors: [
-    const Color(0xFFF6625E),
-    const Color(0xFF836DB8),
-    const Color(0xFFDECB9C),
-    Colors.white,
-  ],
-  rating: 4.5,
-  price: 29.99,
-  isFavourite: true,
-  isPopular: true,
-);
-
 class ProductItem {
   final int id;
   final String title;
@@ -126,3 +83,68 @@ class Rating {
         'count': count,
       };
 }
+
+class Product {
+  final int id;
+  final String title;
+  final String description;
+  final List<String> images;
+  final List<Color> colors;
+  final double rating;
+  final double price;
+  bool isFavourite;
+
+  Product({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.images,
+    required this.colors,
+    required this.rating,
+    required this.price,
+    this.isFavourite = false,
+  });
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        images: List<String>.from(json['images']),
+        colors: (json['colors'] as List).map((e) => Color(e)).toList(),
+        rating: (json['rating'] as num).toDouble(),
+        price: (json['price'] as num).toDouble(),
+        isFavourite: json['isFavourite'] ?? false,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'images': images,
+        'colors': colors.map((c) => c.value).toList(),
+        'rating': rating,
+        'price': price,
+        'isFavourite': isFavourite,
+      };
+}
+
+Product sampleProduct = Product(
+  id: 1,
+  title: 'Sample Product',
+  description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae leo eu sapien ultrices pellentesque ut ut orci. Curabitur posuere, diam eu dapibus pharetra, eros diam iaculis mauris, at ultrices augue sapien quis massa. Ut tortor massa, tincidunt consequat vulputate eu, molestie sed magna. Ut urna augue, viverra ac sagittis at, vehicula sagittis elit. Sed gravida urna vitae diam rutrum, in vehicula quam sodales. Proin blandit dolor et lacus vestibulum, a dignissim turpis accumsan. Nulla non turpis semper, accumsan turpis ut, sodales libero. Cras ut odio posuere, cursus risus vel, laoreet tortor. Ut rhoncus lectus ipsum, sit amet dignissim justo tincidunt id. Praesent laoreet odio vel diam efficitur tempor. Proin sagittis commodo dapibus. Phasellus tincidunt massa orci, non convallis turpis efficitur a. Proin consectetur pretium urna, sed varius dui tempus sit amet. Nam consectetur gravida mi, at iaculis diam posuere ut. Ut eleifend ligula ut justo eleifend, eu malesuada nunc consequat. Suspendisse eget maximus mauris, nec mollis ipsum.',
+  images: [
+    "assets/images/ilustration_1.png",
+    "assets/images/ilustration_2.png",
+    "assets/images/ilustration_3.png",
+  ],
+  colors: [
+    const Color(0xFFF6625E),
+    const Color(0xFF836DB8),
+    const Color(0xFFDECB9C),
+    Colors.white,
+  ],
+  rating: 4.5,
+  price: 29.99,
+  isFavourite: true,
+);

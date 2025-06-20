@@ -21,13 +21,8 @@ class OrderView extends GetView<OrderController> {
           centerTitle: true,
           backgroundColor: Colors.transparent,
           bottom: TabBar(
-            tabAlignment: TabAlignment.start,
-            isScrollable: true,
             controller: controller.tabController,
             tabs: const [
-              Tab(text: 'Pending'),
-              Tab(text: 'Shipped'),
-              Tab(text: 'Completed'),
               Tab(text: 'Pending'),
               Tab(text: 'Shipped'),
               Tab(text: 'Completed'),
@@ -37,9 +32,6 @@ class OrderView extends GetView<OrderController> {
         body: TabBarView(
           controller: controller.tabController,
           children: const [
-            Center(child: Text('Pending Orders')),
-            Center(child: Text('Shipped Orders')),
-            Center(child: Text('Completed Orders')),
             Center(child: Text('Pending Orders')),
             Center(child: Text('Shipped Orders')),
             Center(child: Text('Completed Orders')),

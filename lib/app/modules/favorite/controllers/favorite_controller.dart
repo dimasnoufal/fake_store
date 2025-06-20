@@ -1,9 +1,10 @@
+import 'package:fake_store/app/services/favorite_service%20.dart';
 import 'package:get/get.dart';
 
 class FavoriteController extends GetxController {
-  //TODO: Implement FavoriteController
+  // Initializing methods
+  final fav = Get.find<FavoriteService>();
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +19,4 @@ class FavoriteController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

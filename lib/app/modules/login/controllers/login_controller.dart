@@ -160,6 +160,7 @@ class LoginController extends GetxController {
     final userString = prefs.value?.getString('user');
     if (userString != null) {
       user = json.decode(userString);
+      Logger.printInfo('User from prefs: $user');
       print('Username: ${user!['username']}');
       print('Password: ${user!['password']}');
     }
@@ -219,14 +220,14 @@ class LoginController extends GetxController {
                 prefs.value?.setString('token', responseLogin['body']['token']);
                 Logger.printInfo(
                     'Token prefs: ${prefs.value?.getString('token')}');
-                final user = <String, dynamic>{
-                  'username': username,
-                  'password': password,
+                final userTempory = <String, dynamic>{
+                  'username': user!['username'],
+                  'password': user!['password'],
                 };
-                Logger.printInfo('User data: $user');
-                prefs.value?.setString('user', json.encode(user));
+                Logger.printInfo('User data: $userTempory');
+                prefs.value?.setString('user', json.encode(userTempory));
                 prefs.value?.setString('token', responseLogin['body']['token']);
-                prefs.value?.setBool('isRememberMe', isRememberMe.value);
+                // prefs.value?.setBool('isRememberMe', isRememberMe.value);
                 Get.offAllNamed(Routes.HOME_MAIN);
               } else {
                 Logger.printX(

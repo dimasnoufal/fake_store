@@ -5,6 +5,8 @@ import 'package:fake_store/app/helper/shared/logger.dart';
 import 'package:fake_store/app/helper/shared/string.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
 import 'package:fake_store/app/services/check_connectivity.dart';
+import 'package:fake_store/app/services/favorite_service%20.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,17 +16,23 @@ class DetailItemController extends GetxController {
   RxInt selectedColor = 0.obs;
   RxInt countItem = 0.obs;
   RxBool isShowMore = false.obs;
-  final id = Get.parameters['id'];
+  final id = int.parse(Get.parameters['id']!);
   final requestStatus = requestState.isEmpty.obs;
   late ProductItem dataGetProduct;
+  late Product product;
+  late RxBool isFav;
   List<dynamic> image = <dynamic>[].obs;
   AppLocalizations get strings => AppLocalizations.of(Get.context!)!;
   RxBool showSeeMore = false.obs;
+
+  // Initializing method
+  final fav = Get.find<FavoriteService>();
 
   @override
   void onInit() {
     super.onInit();
     checkId();
+    isFav = RxBool(fav.isFavorite(id));
     getProduct();
   }
 
@@ -42,6 +50,11 @@ class DetailItemController extends GetxController {
     Logger.printInfo('Id $id');
   }
 
+  void toggleFavorite() {
+    fav.toggle(product);
+    isFav.value = fav.isFavorite(id);
+  }
+
   void addItem() => countItem.value++;
 
   void removeItem() {
@@ -57,7 +70,7 @@ class DetailItemController extends GetxController {
     try {
       bool isConnected = await CheckConnectivity.isConnected();
 
-      final responseGetProduct = await api.get('/products/$id');
+      final responseGetProduct = await api.get('/products/${id.toString()}');
 
       Logger.printInfo('Response Get Product: ${responseGetProduct}');
 
@@ -66,11 +79,25 @@ class DetailItemController extends GetxController {
           // dataGetProduct
           //     .assignAll(Map<String, dynamic>.from(responseGetProduct['body']));
           // image = [dataGetProduct['image']];
+
           dataGetProduct = ProductItem.fromJson(
               Map<String, dynamic>.from(responseGetProduct['body']));
           showSeeMore.value = dataGetProduct.description.length > 150;
           image = [dataGetProduct.image];
           Logger.printInfo('Data Get Product: ${dataGetProduct}');
+
+          product = Product(
+            id: dataGetProduct.id,
+            title: dataGetProduct.title,
+            description: dataGetProduct.description,
+            images: [image[0]],
+            colors: [Colors.red, Colors.blue, Colors.green],
+            rating: dataGetProduct.rating.rate,
+            price: dataGetProduct.price,
+            isFavourite: isFav.value,
+          );
+          Logger.printInfo('Product: ${product.toJson()}');
+
           requestStatus.value = requestState.isSuccess;
         } else {
           requestStatus.value = requestState.isError;
