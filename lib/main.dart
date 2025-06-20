@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fake_store/app/services/cart_service.dart';
 import 'package:fake_store/app/services/favorite_service%20.dart';
 import 'package:fake_store/app/services/http_service.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
@@ -21,6 +22,9 @@ void main() async {
 
   // Initialize favorite service
   await Get.putAsync(() => FavoriteService().init());
+
+  // Initialize cart service
+  await Get.putAsync(() => CartService().init());
 
   // debugPaintSizeEnabled = true;
 

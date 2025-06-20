@@ -1,5 +1,7 @@
 import 'package:fake_store/app/data/models/cart_item.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
+import 'package:fake_store/app/helper/widgets/state_custom.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -11,13 +13,15 @@ class CartView extends GetView<CartController> {
   const CartView({super.key});
   @override
   Widget build(BuildContext context) {
-    Widget _buildCartCard(Cart cart) {
+    Widget _buildCartCard(CartItem cart, int index) {
       return Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
           borderRadius: BorderRadius.circular(15),
-          onTap: () {},
+          onTap: () {
+            Get.toNamed('${Routes.DETAIL_ITEM}/${cart.product.id}');
+          },
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
@@ -37,7 +41,9 @@ class CartView extends GetView<CartController> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Ink.image(
-                        image: AssetImage(cart.product.images[0]),
+                        image: NetworkImage(
+                          cart.product.images[0],
+                        ),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -58,16 +64,88 @@ class CartView extends GetView<CartController> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text.rich(
-                      TextSpan(
-                        text: "\$${cart.product.price}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.kPrimaryColor),
+                    Container(
+                      width: Get.width * 0.6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextSpan(
-                              text: " x ${cart.numOfItem}",
-                              style: Theme.of(context).textTheme.bodyLarge),
+                          Text.rich(
+                            TextSpan(
+                              text: "\$${cart.product.price}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.kPrimaryColor),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (controller.cart.items[index].quantity >
+                                      1) {
+                                    controller.decrementQty(
+                                      cart.product,
+                                      1,
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(
+                                    side: BorderSide(
+                                      color: AppColor.kPrimaryColor,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  backgroundColor: AppColor.kLightColor,
+                                  overlayColor:
+                                      AppColor.kPrimaryColor.withOpacity(0.5),
+                                ),
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: AppColor.kPrimaryColor,
+                                  size: 20,
+                                ),
+                              ),
+                              Obx(
+                                () => SizedBox(
+                                  width: 20,
+                                  child: Center(
+                                    child: Text(
+                                      controller.cart.items[index].quantity
+                                          .toString(),
+                                      style: AppColor.blackTextStyle.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  controller.incrementQty(cart.product, 1);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(
+                                    side: BorderSide(
+                                      color: AppColor.kPrimaryColor,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  backgroundColor: AppColor.kLightColor,
+                                  overlayColor:
+                                      AppColor.kPrimaryColor.withOpacity(0.5),
+                                ),
+                                child: const Icon(
+                                  Icons.add,
+                                  color: AppColor.kPrimaryColor,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     )
@@ -160,28 +238,38 @@ class CartView extends GetView<CartController> {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        text: "Total:\n",
-                        children: [
-                          TextSpan(
-                            text: "\$${controller.totalPrice}",
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                        ],
+              Obx(
+                () => Row(
+                  children: [
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          text: "Total:\n",
+                          children: [
+                            TextSpan(
+                              text: "\$${controller.cart.total}",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("Check Out"),
-                    ),
-                  ),
-                ],
+                    controller.cart.items.isNotEmpty
+                        ? Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Get.toNamed(
+                                  Routes.CHECKOUT,
+                                  arguments: controller.cart.items.toList(),
+                                );
+                              },
+                              child: const Text("Check Out"),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
               ),
             ],
           ),
@@ -191,58 +279,71 @@ class CartView extends GetView<CartController> {
 
     return GetBuilder<CartController>(
       init: CartController(),
-      builder: (controller) => Scaffold(
-        appBar: AppBar(
-          title: Column(
-            children: [
-              const Text(
-                "Your Cart",
-                style: TextStyle(color: Colors.black),
-              ),
-              Text(
-                "${demoCarts.length} items",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
+      builder: (controller) => Obx(
+        () => Scaffold(
+          appBar: AppBar(
+            title: Column(
+              children: [
+                const Text(
+                  "Your Cart",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  "${controller.cart.items.length} items",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
           ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ListView.builder(
-            itemCount: demoCarts.length,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Dismissible(
-                key: Key(demoCarts[index].product.id.toString()),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {},
-                background: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFE6E6),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      SvgPicture.asset(
-                        "assets/icons/trash.svg",
-                        colorFilter: ColorFilter.mode(
-                          AppColor.kErrorColor,
-                          BlendMode.srcIn,
+          body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: controller.cart.items.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: controller.cart.items.length,
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Dismissible(
+                          key: Key(controller.cart.items[index].product.id
+                              .toString()),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction) {
+                            controller.cart.removeOne(
+                              controller.cart.items[index].product,
+                              quantity: controller.cart.items[index].quantity,
+                            );
+                          },
+                          background: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFE6E6),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Row(
+                              children: [
+                                const Spacer(),
+                                SvgPicture.asset(
+                                  "assets/icons/trash.svg",
+                                  colorFilter: ColorFilter.mode(
+                                    AppColor.kErrorColor,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: _buildCartCard(
+                              controller.cart.items[index], index),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                child: _buildCartCard(demoCarts[index]),
-              ),
-            ),
-          ),
+                    )
+                  : StateCustom.Empty(
+                      title: "Your cart is empty",
+                      description: "Add items to your cart to proceed.",
+                    )),
+          bottomNavigationBar: _buildCheckoutCard(),
         ),
-        bottomNavigationBar: _buildCheckoutCard(),
       ),
     );
   }

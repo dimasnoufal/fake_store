@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fake_store/app/data/models/cart_item.dart';
 import 'package:fake_store/app/data/models/product_item.dart';
 import 'package:fake_store/app/helper/shared/app_color.dart';
 import 'package:fake_store/app/helper/shared/common_utils.dart';
@@ -6,6 +7,7 @@ import 'package:fake_store/app/helper/shared/enum.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
 import 'package:fake_store/app/helper/widgets/shimmers.dart';
 import 'package:fake_store/app/helper/widgets/state_custom.dart';
+import 'package:fake_store/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -433,7 +435,9 @@ class DetailItemView extends GetView<DetailItemController> {
                     child: Row(
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            controller.addToCart();
+                          },
                           child: const Icon(
                             Icons.add_shopping_cart_sharp,
                             color: AppColor.kLightColor,
@@ -445,7 +449,14 @@ class DetailItemView extends GetView<DetailItemController> {
                           child: SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.toNamed(Routes.CHECKOUT, arguments: [
+                                  CartItem(
+                                    product: controller.product,
+                                    quantity: controller.countItem.value,
+                                  )
+                                ]);
+                              },
                               child: const Text("Checkout"),
                             ),
                           ),

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
+import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/views/checkout_view.dart';
 import '../modules/detail_item/bindings/detail_item_binding.dart';
 import '../modules/detail_item/views/detail_item_view.dart';
 import '../modules/favorite/bindings/favorite_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

@@ -4,6 +4,7 @@ import 'package:fake_store/app/helper/shared/enum.dart';
 import 'package:fake_store/app/helper/shared/logger.dart';
 import 'package:fake_store/app/helper/shared/string.dart';
 import 'package:fake_store/app/helper/widgets/dialogs.dart';
+import 'package:fake_store/app/services/cart_service.dart';
 import 'package:fake_store/app/services/check_connectivity.dart';
 import 'package:fake_store/app/services/favorite_service%20.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class DetailItemController extends GetxController {
   // Initializing variables
   RxInt selectedImage = 0.obs;
   RxInt selectedColor = 0.obs;
-  RxInt countItem = 0.obs;
+  RxInt countItem = 1.obs;
   RxBool isShowMore = false.obs;
   final id = int.parse(Get.parameters['id']!);
   final requestStatus = requestState.isEmpty.obs;
@@ -27,6 +28,7 @@ class DetailItemController extends GetxController {
 
   // Initializing method
   final fav = Get.find<FavoriteService>();
+  final cart = Get.find<CartService>();
 
   @override
   void onInit() {
@@ -58,7 +60,7 @@ class DetailItemController extends GetxController {
   void addItem() => countItem.value++;
 
   void removeItem() {
-    if (countItem.value > 0) {
+    if (countItem.value > 1) {
       countItem.value--;
     }
   }
@@ -125,5 +127,16 @@ class DetailItemController extends GetxController {
         message: e.toString(),
       );
     }
+  }
+
+  void addToCart() {
+    cart.add(product, quantity: countItem.value);
+    Dialogs.successDialog(
+      context: Get.context!,
+      message: 'Successfully added to cart',
+      function: () {
+        // Get.back();
+      },
+    );
   }
 }
